@@ -6,7 +6,7 @@
 Estimates coefficients of a Hierarchical Bayes Multinomial Logit Model
 }
 \usage{
-choicemodelr(data, xcoding, demos, prior, mcmc, constraints, options)
+choicemodelr(data, xcoding, demos, prior, mcmc, constraints, options, directory)
 }
 \arguments{
   \item{data}{
@@ -123,7 +123,8 @@ The 1 x 1 matrices for continuous variables are interpreted as follows:
 
 \bold{wgt} = the choice-set weight parameter; possible values are 1 to 10.  This parameter only needs to be specified if estimating a model using a share dependent variable (default is 5).
 
-\bold{restart}:  Set to TRUE if restarting from a previous model estimation.  To use this option, a model estimation must have been completed prior to the current run, and the restart.txt file must be in the working directory.  All iterations from the previous run are treated as burn-in.  When restarting, keep all arguments (except for R and use) identical to those of the previous run to avoid errors.}
+\bold{restart}:  Set to TRUE if restarting from a previous model estimation.  To use this option, a model estimation must have been completed prior to the current run, and the restart.txt file must be in the directory specified in the directory argument of the choicemodelr function.  All iterations from the previous run are treated as burn-in.  When restarting, keep all arguments (except for R and use) identical to those of the previous run to avoid errors.}
+  \item{directory}{The directory where RBetas.csv, RLH.csv, RLog.txt, and restart.txt will be saved.  This is also the directory from which restart.txt will be read if restart = TRUE.}
 }
 \details{
 Model:\cr
@@ -220,7 +221,9 @@ for (i in 1:length(attlevels)) {
 	}
 }
 
-out = choicemodelr(datar, xcoding, mcmc = mcmc, options = options, constraints = constraints)
+pth = tempdir()
+out = choicemodelr(datar, xcoding, mcmc = mcmc, options = options,
+                   constraints = constraints, directory= pth)
 
 # CALCULATE MEAN ABSOLUTE ERROR BETWEEN ESTIMATED AND TRUE BETAS.
 estbetas = apply(out$betadraw.c,c(1,2),mean)
@@ -273,7 +276,9 @@ for (i in 1:length(attlevels)) {
 	}
 }
 
-out = choicemodelr(sharedatar, xcoding, mcmc = mcmc, options = options, constraints = constraints)
+pth = tempdir()
+out = choicemodelr(sharedatar, xcoding, mcmc = mcmc, options = options,
+                   constraints = constraints, directory=pth)
 
 # CALCULATE MEAN ABSOLUTE ERROR BETWEEN ESTIMATED AND TRUE BETAS.
 estbetas = apply(out$betadraw.c,c(1,2),mean)

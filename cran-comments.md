@@ -1,6 +1,8 @@
 ## R CMD check results
 
+0 errors | 0 warnings | 1 note
 
+* This is a new release.
 ## Test environments
 - R-hub windows-x86_64-devel (r-devel)
 - R-hub ubuntu-gcc-release (r-release)
@@ -15,10 +17,12 @@
   
   Package was archived on CRAN
   
+[Resubmitting package as version 1.3.0 to conform to CRAN repository policies.]
+  
   Possibly misspelled words in DESCRIPTION:
-    MNL (7:221)
+    MNL (7:221)   
     
-  [MNL is a common abbreviation for Multinomial Logit]
+[MNL is a common abbreviation for Multinomial Logit.]
   
   Found the following (possibly) invalid URLs:
     URL: http://www.decisionanalyst.com (moved to https://www.decisionanalyst.com/)
@@ -26,18 +30,11 @@
       Status: 200
       Message: OK
 
-> On windows-x86_64-devel (r-devel), ubuntu-gcc-release (r-release), fedora-clang-devel (r-devel)
-  checking for non-standard things in the check directory ... NOTE
-  Found the following files/directories:
-    'RBetas.csv' 'RLH.csv' 'RLog.txt' 'restart.txt'
-
-[The four files mentioned in the note are saved by the choicemodelr function into the current working directory. These files include model outputs (RBetas.csv’ ‘RLH.csv’), a log file (‘RLog.txt’), and parameters needed for restarting the model algorithm at a later date (‘restart.txt’).]
-
 > On windows-x86_64-devel (r-devel)
   checking for detritus in the temp directory ... NOTE
   Found the following files/directories:
     'lastMiKTeXException'
     
-    [I have no comment about his note.]
+[I have no comment about this note.]
 
-0 errors v | 0 warnings v | 3 notes x
+0 errors v | 0 warnings v | 2 notes x

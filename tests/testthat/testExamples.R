@@ -10,7 +10,7 @@ data(truebetas)
 # FOR CONVERGENCE OF MCMC CHAIN, SET R = 4000 AND use = 2000.
 
 xcoding = c(0, 0)
-mcmc = list(R = 100, use = 100)
+mcmc = list(R = 200, use = 200)
 
 options = list(none=FALSE, save=TRUE, keep=1)
 
@@ -28,7 +28,8 @@ for (i in 1:length(attlevels)) {
   }
 }
 
-out = choicemodelr(datar, xcoding, mcmc = mcmc, options = options, constraints = constraints)
+pth = tempdir()
+out = choicemodelr(datar, xcoding, mcmc = mcmc, options = options, constraints = constraints, directory = pth)
 
 # CALCULATE MEAN ABSOLUTE ERROR BETWEEN ESTIMATED AND TRUE BETAS.
 estbetas = apply(out$betadraw.c,c(1,2),mean)
@@ -63,7 +64,7 @@ data(truebetas)
 # FOR CONVERGENCE OF MCMC CHAIN, SET R = 2000 AND use = 1000.
 
 xcoding = c(0, 0)
-mcmc = list(R = 100, use = 100)
+mcmc = list(R = 200, use = 200)
 
 options = list(none=FALSE, save=TRUE, keep=1)
 
@@ -81,7 +82,8 @@ for (i in 1:length(attlevels)) {
   }
 }
 
-out = choicemodelr(sharedatar, xcoding, mcmc = mcmc, options = options, constraints = constraints)
+pth = tempdir()
+out = choicemodelr(sharedatar, xcoding, mcmc = mcmc, options = options, constraints = constraints, directory = pth)
 
 # CALCULATE MEAN ABSOLUTE ERROR BETWEEN ESTIMATED AND TRUE BETAS.
 estbetas = apply(out$betadraw.c,c(1,2),mean)

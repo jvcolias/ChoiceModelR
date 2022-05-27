@@ -1,6 +1,6 @@
 #' @export
 choicemodelr <-
-function(data, xcoding, demos, prior, mcmc, constraints, options) {
+function(data, xcoding, demos, prior, mcmc, constraints, options, directory) {
 	callStop = function(message) { stop(message, call. = FALSE) }
 
 	if (missing(data)) { callStop("data argument required") }
@@ -230,10 +230,10 @@ function(data, xcoding, demos, prior, mcmc, constraints, options) {
 
 	fR = 0
 	if (restart) {
-		if (!any(list.files() == "restart.txt")) {
-			callStop("file restart.txt does not exist in the working directory")
+		if (!any(list.files(directory) == 'restart.txt')) {
+			callStop("file restart.txt does not exist in the specified directory")
 		}
-		f.in = scan("restart.txt", nlines = 1, skip = 0, quiet = TRUE)
+		f.in = scan(paste(directory,'/','restart.txt', sep = ''), nlines = 1, skip = 0, quiet = TRUE)
 		fR = f.in[1]
 		fUnits = f.in[2]
 		fPar = f.in[3]
@@ -259,7 +259,7 @@ function(data, xcoding, demos, prior, mcmc, constraints, options) {
 		fCount = 1
 		repeat {
 			if (fCount > items) { break }
-			f.in = scan("restart.txt", nlines = ltr[fCount], skip = fIndex, quiet = TRUE)
+			f.in = scan(paste(directory,'/','restart.txt', sep = ''), nlines = ltr[fCount], skip = fIndex, quiet = TRUE)
 			switch(fCount,
 			       lb <- matrix(f.in, ncol = fPar, byrow = TRUE),
 			       lbc <- matrix(f.in, ncol = fPar, byrow = TRUE),
@@ -531,7 +531,7 @@ function(data, xcoding, demos, prior, mcmc, constraints, options) {
 	# OPEN CONNECTION FOR WRITING TO LOG FILE
 	#
 	on.exit(sink())
-	sink("RLog.txt", append = TRUE, type = "output", split = TRUE)
+	sink(paste(directory,'/','RLog.txt', sep = ''), append = TRUE, type = "output", split = TRUE)
 
 	#
 	# PRINT TO CONSOLE AND LOG
@@ -741,14 +741,14 @@ function(data, xcoding, demos, prior, mcmc, constraints, options) {
 	#
 	# WRITE RESTART FILE
 	#
-	write.table(cbind(R + fR, nunits, npar, s, as.numeric(constrain), as.numeric(drawdelta)), "restart.txt", sep = " ", row.names = FALSE, col.names = FALSE)
-	write.table(oldbetas, "restart.txt", sep = " ", row.names = FALSE, col.names = FALSE, append = TRUE)
+	write.table(cbind(R + fR, nunits, npar, s, as.numeric(constrain), as.numeric(drawdelta)), paste(directory,'/','restart.txt', sep = ''), sep = " ", row.names = FALSE, col.names = FALSE)
+	write.table(oldbetas, paste(directory,'/','restart.txt', sep = ''), row.names = FALSE, col.names = FALSE, append = TRUE)
 	if (constrain) {
-		write.table(oldbetas.c, "restart.txt", sep = " ", row.names = FALSE, col.names = FALSE, append = TRUE)
+		write.table(oldbetas.c, paste(directory,'/','restart.txt', sep = ''), sep = " ", row.names = FALSE, col.names = FALSE, append = TRUE)
 	}
 	if (drawdelta) {
-		write.table(t(olddelta), "restart.txt", sep = " ", row.names = FALSE, col.names = FALSE, append = TRUE)
-	} 
+		write.table(t(olddelta), paste(directory,'/','restart.txt', sep = ''), sep = " ", row.names = FALSE, col.names = FALSE, append = TRUE)
+	}
 
 	#
 	#
@@ -765,19 +765,19 @@ function(data, xcoding, demos, prior, mcmc, constraints, options) {
 	if (none) { betanames = c(betanames, "NONE") }
 	cat("Writing estimated unit-level betas to Rbetas.csv in the working directory", fill = TRUE)
 	cat("", fill=TRUE)
-	write.table(betawrite, file = "RBetas.csv", sep = ",", col.names = betanames, row.names = FALSE, qmethod = "double")
+	write.table(betawrite, file = paste(directory,'/','RBetas.csv', sep = ''), sep = ",", col.names = betanames, row.names = FALSE, qmethod = "double")
 
 	#
 	#
 	# WRITE RESPONDENT RLH TO CSV FILE
 	#
 	# new code below
-	likeout = likeout / use                                                        
+	likeout = likeout / use
 	cat("Writing RLH, the geometric mean of the likelihood of the choices made,\n
       across the choice sets of each unit to RLH.csv in the working directory",
 	    fill = TRUE)
 	cat("", fill = TRUE)
-	write.table(cbind(matrix(ID, ncol = 1), likeout), file = "RLH.csv", sep = ",",
+	write.table(cbind(matrix(ID, ncol = 1), likeout), file = paste(directory,'/','RLH.csv', sep = ''), sep = ",",
 	            col.names = c('ID','RLH'),
 	            row.names = FALSE, qmethod = "double")
 	if (save) {
